@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        #output {
+            border: 1px solid #efffff;
+            background-color: #efffff;
+            padding: 20px;
+            margin-top: 20px;
+            height: 200px;
+            overflow-y: auto;
+        }
+        input {
+            margin: 5px;
+        }
+        button {
+            margin: 5px;
+            background-color: #fffbef;
+        }
+    </style>
+</head>
+<body>
+    <h1>Minishell remota</h1>
+    <button id="connectBtn">Conectarse</button>
+    <button id="clearBtn"> Limpiar </button>
+    <br>
+    <br>
+    <input type="text" id="commandInput" placeholder="Escribe un comando">
+    <button id="sendBtn">Enviar</button>
+    <div id="output"></div>
+
+    <script>
+        let ws;
+        const connectBtn = document.getElementById('connectBtn');
+        const sendBtn = document.getElementById('sendBtn');
+        const clearBtn=document.getElementById('clearBtn');
+        const commandInput = document.getElementById('commandInput');
+        const output = document.getElementById('output');
+
+        clearBtn.addEventListener('click',()=>{
+            output.innerHTML='';
+        });
+
+        connectBtn.addEventListener('click', () => {
+            ws = new WebSocket(`ws://${location.host}`);
+            ws.onmessage = (event) => {
+                const message = document.createElement('div');
+                message.textContent = event.data;
+                output.appendChild(message);
+                output.scrollTop = output.scrollHeight;
+            };
+            ws.onopen = () => {
+                const message = document.createElement('div');
+                message.textContent = 'Conectado al servidor.';
+                output.appendChild(message);
+            };
+            ws.onclose = () => {
+                const message = document.createElement('div');
+                message.textContent = 'Conexión cerrada.';
+                output.appendChild(message);
+            };
+        });
+
+        sendBtn.addEventListener('click', () => {
+            if (ws && ws.readyState === WebSocket.OPEN) {
+                const command = commandInput.value;
+                ws.send(command);
+                commandInput.value = '';
+            } else {
+                alert('Conéctate primero al servidor.');
+            }
+        });
+        
+    </script>
+</body>
+</html>
+
