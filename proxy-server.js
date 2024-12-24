@@ -18,10 +18,10 @@ app.use(express.static('public'));
 wss.on('connection', (ws) => {
     const clientSocket = new net.Socket();
 
-    clientSocket.connect(SOCKET_PORT, '127.0.0.1', () => {
+    clientSocket.connect(SOCKET_PORT, '172.28.32.137', () => {
         console.log('Conectado al servidor C');
         ws.send('Conexión establecida con el servidor.');
-    });
+    });    
 
     clientSocket.on('data', (data) => {
         ws.send(data.toString());
@@ -46,7 +46,6 @@ wss.on('connection', (ws) => {
 });
 
 // Iniciar servidor
-server.listen(PORT, () => {
+server.listen(PORT,'0.0.0.0', () => {
     console.log(`Servidor web escuchando en http://localhost:${PORT}`);
 });
-

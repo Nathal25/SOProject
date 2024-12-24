@@ -20,7 +20,7 @@ int main() {
 
     serv_addr.sin_family = AF_INET;
     serv_addr.sin_port = htons(PORT);
-    assert(inet_pton(AF_INET, "127.0.0.1", &serv_addr.sin_addr) > 0);
+    assert(inet_pton(AF_INET, "172.28.32.137", &serv_addr.sin_addr) > 0);
 
     // Conectar al servidor
     assert(connect(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) >= 0);
