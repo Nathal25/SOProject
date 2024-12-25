@@ -7,8 +7,8 @@
 #include <sys/wait.h>
 #include <assert.h>
 
-#define PORT 8080
-#define MAX 1024
+#define PORT 8080   //Puerto al que se conecta
+#define MAX 1024    //Máximo de caracteres permitidos
 
 int main() {
     int server_fd, new_socket;
@@ -16,7 +16,7 @@ int main() {
     int addrlen = sizeof(address);
     char buffer[MAX] = {0};
     
-    // Crear socket
+    //Creción del socket
     server_fd = socket(AF_INET, SOCK_STREAM, 0);
     assert(server_fd >= 0);
 
@@ -24,7 +24,7 @@ int main() {
     address.sin_addr.s_addr = INADDR_ANY;
     address.sin_port = htons(PORT);
 
-    // Enlazar el socket
+    //Enlaza el socket
     assert(bind(server_fd, (struct sockaddr *)&address, sizeof(address)) >= 0);
     assert(listen(server_fd, 3) >= 0);
 
@@ -43,11 +43,11 @@ int main() {
             buffer[bytes_read] = '\0';
             printf("Comando recibido: %s\n", buffer);
 
-            // Crear proceso para ejecutar el comando
+            //Crea proceso para ejecutar el comando
             pid_t pid = fork();
             assert(pid >= 0);
 
-            if (pid == 0) { // Proceso hijo
+            if (pid == 0) { //Proceso hijo
                 dup2(new_socket, STDOUT_FILENO);
                 dup2(new_socket, STDERR_FILENO);
                 char *args[] = {"/bin/sh", "-c", buffer, NULL};
@@ -59,8 +59,8 @@ int main() {
             }
             if (strcmp(buffer, "salida") == 0) {
                 printf("Cliente desconectado por solicitud.\n");
-                close(new_socket); // Cerrar el socket del cliente
-                break; // Salir del bucle
+                close(new_socket); //Cierra el socket del cliente
+                break; //Fin del bucle
             }
         }
         close(new_socket);

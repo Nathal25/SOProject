@@ -22,7 +22,7 @@ int main() {
     serv_addr.sin_port = htons(PORT);
     assert(inet_pton(AF_INET, "172.28.32.137", &serv_addr.sin_addr) > 0);
 
-    // Conectar al servidor
+    //Conexión al servidor
     assert(connect(sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) >= 0);
 
     printf("Conectado al servidor. Escribe 'salir' para terminar.\n");
@@ -30,7 +30,7 @@ int main() {
     while (1) {
         printf("> ");
         fgets(buffer, MAX, stdin);
-        buffer[strcspn(buffer, "\n")] = 0; // Remover nueva línea
+        buffer[strcspn(buffer, "\n")] = 0;
 
         send(sock, buffer, strlen(buffer), 0);
         if (strcmp(buffer, "salida") == 0) {

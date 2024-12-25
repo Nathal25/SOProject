@@ -1,10 +1,11 @@
+//Hace de puente entre el servidor y la página HTML, permite que la página haga de 'cliente'
 const net = require('net');
 const express = require('express');
 const http = require('http');
 const WebSocket = require('ws');
 
 const PORT = 3000; // Puerto del servidor web
-const SOCKET_PORT = 8080; // Puerto del servidor C
+const SOCKET_PORT = 8080; // Puerto del servidor
 
 // Crear aplicación Express
 const app = express();
