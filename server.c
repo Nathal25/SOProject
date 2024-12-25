@@ -43,11 +43,6 @@ int main() {
             buffer[bytes_read] = '\0';
             printf("Comando recibido: %s\n", buffer);
 
-            if (strcmp(buffer, "salir") == 0) {
-                printf("Cliente desconectado.\n");
-                break;
-            }
-
             // Crear proceso para ejecutar el comando
             pid_t pid = fork();
             assert(pid >= 0);
@@ -61,6 +56,11 @@ int main() {
             } else { // Proceso padre
                 wait(NULL);
                 write(new_socket, "\n", 1); // Enviar nueva línea para marcar el final
+            }
+            if (strcmp(buffer, "salida") == 0) {
+                printf("Cliente desconectado por solicitud.\n");
+                close(new_socket); // Cerrar el socket del cliente
+                break; // Salir del bucle
             }
         }
         close(new_socket);

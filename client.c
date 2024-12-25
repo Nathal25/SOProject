@@ -33,7 +33,12 @@ int main() {
         buffer[strcspn(buffer, "\n")] = 0; // Remover nueva línea
 
         send(sock, buffer, strlen(buffer), 0);
-        if (strcmp(buffer, "salir") == 0) break;
+        if (strcmp(buffer, "salida") == 0) {
+            printf("Cerrando conexión...\n");
+            send(sock, buffer, strlen(buffer), 0); // Enviar "salida" al servidor
+            close(sock); // Cerrar el socket
+            break; // Salir del bucle principal
+        }
 
         int bytes_read = read(sock, buffer, MAX);
         if (bytes_read > 0) {

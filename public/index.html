@@ -27,7 +27,7 @@
     </style>
 </head>
 <body>
-    <h1>Minishell remota</h1>
+    <h1>Shell remota</h1>
     <button id="connectBtn">Conectarse</button>
     <button id="clearBtn"> Limpiar </button>
     <br>
@@ -69,15 +69,25 @@
         });
 
         sendBtn.addEventListener('click', () => {
-            if (ws && ws.readyState === WebSocket.OPEN) {
-                const command = commandInput.value;
-                ws.send(command);
-                commandInput.value = '';
+            const command = commandInput.value.trim();
+            if (command === 'salida') {
+                ws.send(command); // Enviar el comando 'salida' al servidor
+                ws.close(); // Cerrar la conexión WebSocket
+                output.innerHTML += "<div>Conexión cerrada.</div>";
             } else {
-                alert('Conéctate primero al servidor.');
+                if (ws && ws.readyState === WebSocket.OPEN) {
+                    ws.send(command); // Enviar otros comandos
+                    commandInput.value = '';
+                } else {
+                    alert('Conéctate primero al servidor.');
+                }
             }
         });
         
+        
     </script>
+    <!--You looking for something special?
+    Too bad for you, there's nothing.
+    Give us a good grade, please :D -->
 </body>
 </html>

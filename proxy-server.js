@@ -33,15 +33,22 @@ wss.on('connection', (ws) => {
     });
 
     ws.on('message', (message) => {
-        if (message === 'salir') {
-            clientSocket.end();
+        const command = message.toString().trim();
+        console.log(`Comando recibido: ${command}`);
+
+        if (command === 'salida') {
+            console.log('Cliente solicitó desconexión.');
+            ws.send('Conexión cerrada por solicitud del cliente.');
+            ws.close(); // Cierra la conexión WebSocket
         } else {
+            // Procesar otros comandos
             clientSocket.write(message + '\n');
+            ws.send(`Comando ejecutado: ${command}`);
         }
     });
 
     ws.on('close', () => {
-        clientSocket.destroy();
+        console.log('Conexión con cliente cerrada.');
     });
 });
 
