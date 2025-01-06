@@ -1,7 +1,5 @@
 # Proyecto Shell Remoto
 
-![Terminal Remota](https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.tecnozero.com%2Fblog%2Fterminal-server%2F&psig=AOvVaw20MMGdOlTpWxSGgGTeqaj1&ust=1735038678034000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCLixkPLgvYoDFQAAAAAdAAAAABAR)
-
 
 ## Descripción del Proyecto
 El **Proyecto Shell Remoto** es una aplicación cliente/servidor desarrollada en C que permite a los usuarios ejecutar comandos en un computador remoto.  
