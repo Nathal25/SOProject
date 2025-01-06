@@ -3,49 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Client</title>
+    <title>Shell Remota</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
+            background-color: rgb(199, 214, 214);
+        }
+        h1 {
+            color: #333;
+        }
+        p {
+            margin-bottom: 20px;
+            line-height: 1.5;
         }
         #output {
-            border: 1px solid #efffff;
+            border: 2px solid #efffff;
             background-color: #efffff;
             padding: 20px;
             margin-top: 20px;
             height: 200px;
             overflow-y: auto;
+            border-radius: 10px; /* Bordes redondeados */
         }
-        input {
+        input[type="text"] {
             margin: 5px;
+            padding: 10px;
+            width: calc(100% - 140px);
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
         }
         button {
             margin: 5px;
+            padding: 10px 15px;
             background-color: #fffbef;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        button:hover {
+            background-color: #f0f0f0;
+            border-color: #ccc;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        }
+        button:active {
+            transform: scale(0.98);
+        }
+        .input-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .button-container {
+            margin-bottom: 10px;
         }
     </style>
 </head>
 <body>
-    <h1>Minishell remota</h1>
-    <button id="connectBtn">Conectarse</button>
-    <button id="clearBtn"> Limpiar </button>
-    <br>
-    <br>
-    <input type="text" id="commandInput" placeholder="Escribe un comando">
-    <button id="sendBtn">Enviar</button>
+    <h1>Shell Remota</h1>
+    <p>Sea bienvenido a nuestra shell remota. <br>
+    Antes de ingresar un comando, asegúrese de presionar el botón "Conectarse" y de ver el mensaje de confirmación. <br>
+    Para desconectarse de la terminal, escriba "salida" y verá una confirmación en la terminal de salida.</p>
+
+    <div class="button-container">
+        <button id="connectBtn">Conectarse</button>
+        <button id="clearBtn">Limpiar</button>
+    </div>
+
     <div id="output"></div>
+
+    <div class="input-container">
+        <input type="text" id="commandInput" placeholder="Escribe un comando">
+        <button id="sendBtn">Enviar</button>
+    </div>
 
     <script>
         let ws;
         const connectBtn = document.getElementById('connectBtn');
         const sendBtn = document.getElementById('sendBtn');
-        const clearBtn=document.getElementById('clearBtn');
+        const clearBtn = document.getElementById('clearBtn');
         const commandInput = document.getElementById('commandInput');
         const output = document.getElementById('output');
 
-        clearBtn.addEventListener('click',()=>{
-            output.innerHTML='';
+        clearBtn.addEventListener('click', () => {
+            output.innerHTML = '';
         });
 
         connectBtn.addEventListener('click', () => {
@@ -69,16 +113,20 @@
         });
 
         sendBtn.addEventListener('click', () => {
-            if (ws && ws.readyState === WebSocket.OPEN) {
-                const command = commandInput.value;
+            const command = commandInput.value.trim();
+            if (command === 'salida') {
                 ws.send(command);
-                commandInput.value = '';
+                ws.close();
+                output.innerHTML += "<div>Conexión cerrada.</div>";
             } else {
-                alert('Conéctate primero al servidor.');
+                if (ws && ws.readyState === WebSocket.OPEN) {
+                    ws.send(command);
+                    commandInput.value = '';
+                } else {
+                    alert('Conéctate primero al servidor.');
+                }
             }
         });
-        
     </script>
 </body>
 </html>
-
